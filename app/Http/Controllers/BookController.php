@@ -15,7 +15,7 @@ class BookController extends Controller
         $data = DB::table('books')->select(['*'])->get();
         $book = Book::all();
         $count = $data->count();
-        return view('admin.book.danhsach',['book'=>$data],['count'=>$count],['books'=>$book]);
+        return view('admin.book.danhsach',['book'=>$data],['count'=>$count]);
     }
     public function create(array $book){
         return Book::create([
@@ -24,7 +24,7 @@ class BookController extends Controller
             'description'=>$book['description'],
             'image'=>$book['image'],
             'available'=>$book['available'],
-            'ISBN'=>$book['isbn'],
+            'ISBN'=>$book['ISBN'],
         ]);
     }
     public function add(){
@@ -83,12 +83,8 @@ class BookController extends Controller
         return redirect()->route('book.index')->with(['mess'=>'Bạn Đã Xóa : '.$book->title.' Thất Bại ']);
     }
     public function sort(){
-        $book = Book::get()->sortBy('author', 'ASC');
-        // $book= Book::all();
-        // $book = Book::orderBy('available','asc')->get();
-        if($book!= null){
-            return redirect()->route('book.index')->with(['book'=>$book]);
-        }
+        $book = DB::table('books')->select('*')->orderBy('available','asc')->get();
+        return view('admin.book.sort')->with(['book'=>$book]);
     }
     public function search(Request $request){
         $name = $request['book_id'];

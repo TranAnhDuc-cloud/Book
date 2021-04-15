@@ -68,6 +68,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Book</h6>
                         <a class="collapse-item" href="{{route('book.index')}}">Quản Lý Book</a>
+                        <a class="collapse-item" href="{{route('bookrecord.index')}}">Quản Lý BookRecord</a>
                     </div>
                 </div>
             </li>

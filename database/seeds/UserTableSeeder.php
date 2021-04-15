@@ -15,7 +15,7 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         //
-        // factory(User::class,20)->create();
+        factory(User::class,20)->create();
         User::create([
             'username' => 'admin',
             'firt_name' => 'admin',

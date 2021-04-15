@@ -28,6 +28,7 @@ Route::get('logout','LogoutController@Logout')->name('logout');
 // Quản Lý
 Route::get('user','UserController@index')->name('user.index');
 Route::get('book','BookController@index')->name('book.index');
+Route::get('bookrecord','BookRecordController@index')->name('bookrecord.index');
 
 // User
 // Add
@@ -52,6 +53,22 @@ Route::get('book/delete/{id}','BookController@delete')->name('book.delete');
 // Sort
 Route::get('book/sort','BookController@sort')->name('book.sort');
 // Search
-Route::post('book.search','BookController@search')->name('book.search');
+Route::post('book/search','BookController@search')->name('book.search');
 
 
+
+
+
+// Book
+// Add
+Route::get('bookrecord/add','BookRecordController@add')->name('bookrecord.add');
+Route::post('bookrecord/add','BookRecordController@addShow')->name('bookrecord.show');
+// Edit
+Route::get('bookrecord/edit/{id}','BookRecordController@edit')->name('bookrecord.edit');
+Route::post('bookrecord/update/{id}','BookRecordController@update')->name('bookrecord.update');
+// Remove
+Route::get('bookrecord/delete/{id}','BookRecordController@delete')->name('bookrecord.delete');
+// Sort
+Route::get('bookrecord/sort','BookRecordController@sort')->name('bookrecord.sort');
+// Search
+Route::post('bookrecord/search','BookRecordController@search')->name('bookrecord.search');

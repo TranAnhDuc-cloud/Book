@@ -20,6 +20,7 @@
                     <thead>
                         <tr>
                             <th>STT</th>
+                            <th>ID</th>
                             <th>Username</th>
                             <th>FirtName</th>
                             <th>LastName</th>
@@ -37,6 +38,7 @@
                         @foreach ($data ?? ''  as $item)
                         <tr>
                             <td>{{$i++}}</td>
+                            <td>{{$item ->id}}</td>
                             <td>{{$item ->username}}</td>
                             <td>{{$item ->firt_name}}</td>
                             <td>{{$item ->last_name}}</td>
