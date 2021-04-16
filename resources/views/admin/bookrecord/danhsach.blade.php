@@ -31,7 +31,6 @@
     </form>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{route('bookrecord.index')}}" class="btn btn-warning pt-2 pr-5 pl-5 pb-2">Back</a>
             <a href="{{route('bookrecord.add')}}" class="btn btn-warning pt-2 pr-5 pl-5 pb-2">Thêm BookRecord</a>
             <a href="{{route('bookrecord.sort')}}" class="btn btn-warning pt-2 pr-5 pl-5 pb-2">Sắp Xếp</a>
           

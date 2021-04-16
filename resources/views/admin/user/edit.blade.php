@@ -14,11 +14,6 @@
         <div class="card-header py-3">
             <a href="{{route('user.index')}}" class="btn btn-warning pt-2 pr-5 pl-5 pb-2">Trở Về Danh Sách</a>
         </div>
-        {{-- @if ( Session::has('success') )
-            <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
-            @elseif ( Session::has('error') )
-            <div class="alert alert-error text-center">{{ Session::get('error') }}</div>
-        @endif --}}
         <div class="card-body">
             <div class="table-responsive">
                 @if (session('mess'))
@@ -32,15 +27,24 @@
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                     <div class="form-group">
                         <label>Firt Name</label>
-                        <input type="text" name="firtname" class="form-control" placeholder="{{$user->firt_name}}">
+                        <input type="text" name="firt_name" class="form-control" placeholder="{{$user->firt_name}}">
+                        @error('firt_name')
+                        <small class="form-text text-muted alert alert-danger">{{$message}}</small>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label>Last Name</label>
-                        <input type="text" name="lastname" class="form-control" placeholder="{{$user->last_name}}">
+                        <input type="text" name="last_name" class="form-control" placeholder="{{$user->last_name}}">
+                        @error('last_name')
+                        <small class="form-text text-muted alert alert-danger">{{$message}}</small>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label>Address</label>
                         <input type="text" name="address" class="form-control" placeholder="{{$user->address}}">
+                        @error('address')
+                        <small class="form-text text-muted alert alert-danger">{{$message}}</small>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label> SupperUser </label>

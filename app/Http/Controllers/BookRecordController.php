@@ -7,40 +7,46 @@ use App\BookRecord;
 use App\Http\Requests\BookRequest;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class BookRecordController extends Controller
 {
     //
     public function index(){
-        // $data = DB::table('books')->select(['*'])->get();
         $data = BookRecord::all();
         $book = Book::all();
         $user = User::all();
         $count = $data->count();
         return view('admin.bookrecord.danhsach')->with(['data'=>$data,'count'=>$count,'book'=>$book,'user'=>$user]);
+        // 
     }
-    public function create(array $book){
-        return BookRecord::create([
-            'title'=>$book['title'],
-            'author'=>$book['author'],
-            'description'=>$book['description'],
-            'image'=>$book['image'],
-            'available'=>$book['available'],
-            'ISBN'=>$book['ISBN'],
-        ]);
+    protected function create( $data){
+        $bookrecord = new BookRecord();
+        $bookrecord->user_id = $data['user_id'];
+        $bookrecord->book_id = $data['book_id'];
+        $bookrecord->took_on = $data['took_on'];
+        $bookrecord->returned_on =$data['returned_on'];
+        $bookrecord->due_date = $data['due_date'];
+        $bookrecord->save();
+        return $bookrecord;
     }
     public function add(){
         return view('admin.bookrecord.add');
     }
-    public function addShow(BookRequest $request){
-        $allRequest = $request->all();
-        $validated = $request->validated($allRequest);
-        if($this->create($validated)){
-            return redirect()->route('bookrecord.index')->with(['success','Thêm Book Thành Công']);
-        }else{
-            return redirect()->route('bookrecord.index')->with(['error','Thêm Book Thất Bại']);
-        }
+    public function addShow(Request $request){
+       try {
+           //code...
+            $allRequest = $request->all();
+            if($this->create($allRequest)){
+                return redirect()->route('bookrecord.add')->with('success','Thêm Thành Công');
+            }else{
+                return redirect()->route('bookrecord.add')->with('error','Thêm Thất Bại');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->route('bookrecord.add')->with('error','Thêm Thất Bại');
+       }
     }
     public function edit($id){
         $book = BookRecord::find($id);
@@ -70,6 +76,7 @@ class BookRecordController extends Controller
                 }   
             }
             $book->save();
+            return redirect()->route('bookrecord.edit',$id)->with('mess','Bạn Đã Sửa : Thành Công ');
         } catch (\Throwable $th) {
             //throw $th;
             return redirect()->route('bookrecord.edit',$id);

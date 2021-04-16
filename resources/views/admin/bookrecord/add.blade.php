@@ -10,9 +10,9 @@
         <div class="card-header py-3">
             <a href="{{route('bookrecord.index')}}" class="btn btn-warning pt-2 pr-5 pl-5 pb-2">Trở Về Danh Sách</a>
             @if ( Session::has('success') )
-            <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
+            <div class="alert alert-success text-center mt-2">{{ Session::get('success') }}</div>
             @elseif ( Session::has('error') )
-            <div class="alert alert-error text-center">{{ Session::get('error') }}</div>
+            <div class="alert alert-error text-center mt-2">{{ Session::get('error') }}</div>
             @endif
         </div>
         
@@ -22,35 +22,35 @@
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label>User ID</label>
-                        <input type="text"  name="user_id" class="form-control" placeholder="Nhập User ID">
+                        <input type="number"  name="user_id" class="form-control" placeholder="Nhập User ID">
                         @error('user_id')
                             <small class="form-text text-muted alert alert-danger">{{$message}}</small>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>Book ID</label>
-                        <input type="text"  name="book_id" class="form-control" placeholder="Nhập Book ID">
+                        <input type="number" min="1" max="100" name="book_id" class="form-control" placeholder="Nhập Book ID">
                         @error('book_id')
                             <small class="form-text text-muted alert alert-danger">{{$message}}</small>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>Took On</label>
-                        <input type="text"  name="took_on" class="form-control" placeholder="Nhập Took On">
+                        <input type="date"  name="took_on" class="form-control" placeholder="Nhập Took On">
                         @error('took_on')
                             <small class="form-text text-muted alert alert-danger">{{$message}}</small>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>Returned On</label>
-                        <input type="text"  name="returned_on" class="form-control" placeholder="Nhập Returned On">
+                        <input type="date"  name="returned_on" class="form-control" placeholder="Nhập Returned On">
                         @error('returned_on')
                             <small class="form-text text-muted alert alert-danger">{{$message}}</small>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>Due Date</label>
-                        <input type="text"  name="due_date" class="form-control" placeholder="Nhập Due Date">
+                        <input type="date"  name="due_date" class="form-control" placeholder="Nhập Due Date">
                         @error('due_date')
                             <small class="form-text text-muted alert alert-danger">{{$message}}</small>
                         @enderror

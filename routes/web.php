@@ -33,7 +33,8 @@ Route::get('bookrecord','BookRecordController@index')->name('bookrecord.index');
 // User
 // Add
 Route::get('user/add','UserController@add')->name('user.add');
-Route::post('user/add','UserController@add_show')->name('user.show');
+Route::post('user/add','UserController@addShow')->name('user.show');
+
 // Edit
 Route::get('user/edit/{id}','UserController@edit')->name('user.edit');
 Route::post('user/update/{id}','UserController@update')->name('user.update');
@@ -44,7 +45,7 @@ Route::get('user/delete/{id}','UserController@delete')->name('user.delete');
 // Book
 // Add
 Route::get('book/add','BookController@add')->name('book.add');
-Route::post('book/add','BookController@addShow')->name('book.show');
+Route::post('book/add/show','BookController@addShow')->name('book.show');
 // Edit
 Route::get('book/edit/{id}','BookController@edit')->name('book.edit');
 Route::post('book/update/{id}','BookController@update')->name('book.update');
@@ -57,12 +58,10 @@ Route::post('book/search','BookController@search')->name('book.search');
 
 
 
-
-
-// Book
+// BookRecord
 // Add
 Route::get('bookrecord/add','BookRecordController@add')->name('bookrecord.add');
-Route::post('bookrecord/add','BookRecordController@addShow')->name('bookrecord.show');
+Route::post('bookrecord/add/show','BookRecordController@addShow')->name('bookrecord.show');
 // Edit
 Route::get('bookrecord/edit/{id}','BookRecordController@edit')->name('bookrecord.edit');
 Route::post('bookrecord/update/{id}','BookRecordController@update')->name('bookrecord.update');

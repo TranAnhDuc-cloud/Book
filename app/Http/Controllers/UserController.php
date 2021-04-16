@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\User;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -13,7 +14,7 @@ class UserController extends Controller
 {
     //
     public function index(){
-        $data = DB::table('users')->select(['*'])->get();
+        $data = User::all();
         $count = $data->count();
         return view('admin.user.danhsach',['data'=>$data],['count'=>$count]);
     }
@@ -21,39 +22,43 @@ class UserController extends Controller
     public function add(){
         return view('admin.user.add');
     }
-    public function create(array $user){
-        return User::create([
-            'username'=>$user['username'],
-            // 'firt_name'=>$user['firt_name'],
-            // 'last_name'=>$user['last_name'],
-            'email'=>$user['email'],
-            'is_staff'=>$user['staff'],
-            'is_active'=>$user['active'],
-            'data_joined'=>$user['datajoined'],
-            'is_superuser'=>$user['superuser'],
-            // 'address'=>$user['address'],
-            'password'=>$user['password'],
-        ]);
+    protected function create($data){
+        $user = new User();
+        $user->username = $data['username'];
+        $user->firt_name = $data['firt_name'];
+        $user->last_name = $data['last_name'];
+        $user->email = $data['email'];
+        $user->address = $data['address'];
+        $user->is_staff = $data['is_staff'];
+        $user->is_active = $data['is_active'];
+        $user->is_superuser = $data['is_superuser'];
+        $user->data_joined = $data['data_joined'];
+        $user->password = bcrypt($data['password']);
+        $user->save();
+        return $user;
     }
-    public function add_show(UserRequest $request){
-        $allRequest = $request->all();
-        $validated = $request->validated($allRequest);
-        $validate = $request->validated();
-        if($this->create($this->$validated)){
-            return redirect()->route('user.add')->with(['success','Thêm User Thành Công']);
-        }else{
-            return redirect()->route('user.add')->with(['error','Thêm User Thất Bại']);
+    public function addShow(Request $request){
+        try {
+            $allRequest = $request->all();
+            if($this->create($allRequest)){
+                return redirect()->route('user.add')->with('success','Thêm User '.$request->firt_name.' '.$request->last_name.' Thành Công');
+            }else{
+                return redirect()->route('user.add')->with('error','Thêm Thất Bại');
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+             return redirect()->route('user.add')->with('error','Thêm Thất Bại');
         }
-    }
-    // 
+     }
     public function edit($id){
         $user = User::find($id);
         return view('admin.user.edit',['user'=>$user]);
     }
-    public function update(Request $request,$id){
+    public function update($id, Request $request){
+        $user = new User();
         $user = User::find($id);
-        $user->firt_name = $request->firtname;
-        $user->last_name = $request->lastname;
+        $user->firt_name = $request->firt_name;
+        $user->last_name = $request->last_name;
         $user->address = $request->address;
         $user->is_superuser = $request->superuser;
         $user->save();

@@ -49,6 +49,10 @@ class UserRequest extends FormRequest
             'passwrod.min'=>'passwrod is min = 1',
             'password_confirmed.required'=>'password_confirmed is required',
             'password_confirmed.same'=>'password_confirmed not macth',
+            'firt_name.required'=>'FirtName is required',
+            'last_name.required'=>'LastName is required',
+            'data_joined.required'=>'Data Joined is required',
+            'address.required'=>'Addred is required'
         ];
     }
 }

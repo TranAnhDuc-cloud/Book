@@ -9,11 +9,11 @@
 
         <div class="card-header py-3">
             <a href="{{route('book.index')}}" class="btn btn-warning pt-2 pr-5 pl-5 pb-2">Trở Về Danh Sách</a>
-            {{-- @if ( Session::has('success') )
-            <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
+            @if ( Session::has('success') )
+            <div class="alert alert-success text-center mt-2">{{ Session::get('success') }}</div>
             @elseif ( Session::has('error') )
-            <div class="alert alert-error text-center">{{ Session::get('error') }}</div>
-            @endif --}}
+            <div class="alert alert-error text-center mt-2">{{ Session::get('error') }}</div>
+            @endif
         </div>
         
         <div class="card-body">

@@ -17,27 +17,30 @@ class BookController extends Controller
         $count = $data->count();
         return view('admin.book.danhsach',['book'=>$data],['count'=>$count]);
     }
-    public function create(array $book){
+    protected function create(array $book){
         return Book::create([
-            'title'=>$book['title'],
-            'author'=>$book['author'],
-            'description'=>$book['description'],
-            'image'=>$book['image'],
-            'available'=>$book['available'],
-            'ISBN'=>$book['ISBN'],
+            'title' =>$book['title'],
+            'author' => $book['author'],
+            'description' => $book['description'],
+            'image' => $book['image'],
+            'ISBN' => $book['isbn'],
+            'available' => $book['available'],
         ]);
     }
     public function add(){
         return view('admin.book.add');
     }
-    public function addShow(BookRequest $request){
-        $allRequest = $request->all();
-        $validated = $request->validated($allRequest);
-        if($this->create($validated)){
-            return redirect()->route('book.index')->with(['success','Thêm Book Thành Công']);
-        }else{
-            return redirect()->route('book.index')->with(['error','Thêm Book Thất Bại']);
-        }
+    public function addShow(Request $request){
+       try {
+           //code...
+           $allRequest = $request->all();
+           if($this->create($allRequest))
+               return redirect()->route('book.add')->with('success','Thêm Sách '.$request->title.' Thành Công');
+           
+       } catch (\Throwable $th) {
+           //throw $th;
+            return redirect()->route('book.add')->with('error','Thêm Sách '.$request->title.' Thất Bại');
+       }
     }
     public function edit($id){
         $book = Book::find($id);

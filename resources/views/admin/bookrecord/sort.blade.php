@@ -13,7 +13,7 @@
     <form action="{{route('book.search')}}" method="post">
         @csrf
         <div class="form-group row ">
-            <label for="email" class="col-md-3 col-form-label text-md-right">{{ __('Book ID') }}</label>
+            <label for="email" class="col-md-3 col-form-label text-md-right">{{ __('BookRecord ID') }}</label>
             <div class="col-md-6">
                 <input id="bookrecord_id" class="form-control" name="bookrecord_id" type="number" value="{{ old('bookrecord_id') }}" placeholder="Bookrecord ID" required>
                 @if ($errors->has('bookrecord_id'))
