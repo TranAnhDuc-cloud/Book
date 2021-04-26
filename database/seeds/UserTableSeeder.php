@@ -15,16 +15,16 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         //
-        factory(User::class,20)->create();
+        factory(User::class,10)->create();
         User::create([
             'username' => 'admin',
             'firt_name' => 'admin',
             'last_name' => 'admin',
-            'email' => 'admin@gmail.com',
+            'email' => 'adminaa@gmail.com',
             'address' => 'abcbab123',
             'is_staff' =>'1',
             'is_active' => '1',
-            'data_joined' => date('1990/10/10 , 10:12:10'),
+            'data_joined' => date('1990-10-10'),
             'is_superuser' => '1',
             'email_verified_at' => now(),
             'password' => bcrypt('1'), // password

@@ -42,7 +42,7 @@ class BookRequest extends FormRequest
             'author.required'=>'Author is required',
             'author.min'=>'Author is min = 5 ',
             'author.max'=>'Author is max = 5 ',
-            'description.required'=>'Description is required',
+            'description.required'=> trans('category.desc_required'),
             'description.min'=>'Description is min = 10',
             'description.max'=>'Description is max = 100',
             'image.required'=>'image is required',

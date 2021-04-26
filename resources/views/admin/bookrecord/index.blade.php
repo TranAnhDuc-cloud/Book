@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title','Book')
+@section('title','BookRecord')
 @section("content")
 
 <!-- Begin Page Content -->
@@ -31,7 +31,6 @@
     </form>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{route('bookrecord.index')}}" class="btn btn-info pt-2 pr-5 pl-5 pb-2"><i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>Back</a>
             <a href="{{route('bookrecord.add')}}" class="btn btn-info pt-2 pr-5 pl-5 pb-2">Thêm BookRecord</a>
            <a class=" btn btn-success pt-2 pr-5 pl-5 pb-2" href="" data-toggle="modal" data-target="#rentModal">Cho Mượn
             </a>
@@ -42,7 +41,7 @@
         @if ( Session::has('success') )
         <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
         @elseif ( Session::has('error') )
-        <div class="alert alert-error text-center">{{ Session::get('error') }}</div>
+        <div class="alert alert-danger text-center">{{ Session::get('error') }}</div>
         @endif
         <div class="card-body" style="font-size: 10px">
             <div class="table-responsive">
@@ -81,7 +80,7 @@
 
                             @foreach ($book ?? '' as $row)
                                 @if ($row->id == $item->book_id)
-                                    <td>{{$row->title}}</td>
+                                    <td>{{$row->title ?? ""}}</td>
                                 @endif
                             @endforeach
 
@@ -95,10 +94,14 @@
                             <td>{{$item ->returned_on}}</td>
                             <td>{{$item ->due_date}}</td>
                             
-                            <th><a href="{{route('bookrecord.edit',$item->id)}}" class="btn btn-primary">Edit</a></th>
-                            <th><a href="{{route('bookrecord.delete',$item->id)}}" class="btn btn-danger">Remove</a></th>
-                            <th><a href="{{route('bookrecord.delete',$item->id)}}" class="btn btn-success">Thu Hồi</a></th>
-
+                            <th><a href="{{route('bookrecord.edit',$item->id)}}" style="font-size: 12px" class="btn btn-primary">Edit</a></th>
+                            <th><a href="{{route('bookrecord.delete',$item->id)}}" style="font-size: 12px" class="btn btn-danger">Remove</a></th>
+                            <th><a href="{{route('bookrecord.undo',$item->id)}}"  style="font-size: 12px" class="btn btn-success">Thu Hồi</a></th>
+                            {{-- <th>
+                                <a class=" btn btn-success" style="font-size: 12px" href="" data-toggle="modal" data-target="#undoModal">Thu Hồi
+                                </a>
+                                
+                            </th> --}}
                         </tr>
                         @endforeach
                         @if (session('mess'))
@@ -109,6 +112,7 @@
 
                     </tbody>
                 </table>
+                {{$data->links()}}
             </div>
         </div>
     </div>
@@ -118,5 +122,74 @@
 @endsection
 
 @section('modalRent')
-    @include('admin.bookrecord.modal_rent')
+  {{-- Modal Rent Cho Thuê Sách --}}
+  <script type="text/javascript">
+    // $('select').select2();
+
+    $(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
+  </script>
+  <script src="{{asset('js/select2.min.js')}}"></script>
+@foreach ($data ?? ''  as $item)
+<div class="modal fade" id="rentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cho Mượn Sách</h5>
+        <div class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">x</span>
+        </div>
+    </div>
+    <div class="modal-body">
+       {{-- <option value="">{{$datas->id}}</option> --}}
+       {{-- {{route('bookrecord.rent',[$datas->id,$item->id]) --}}
+        <form action="{{route('bookrecord.rent')}}" method="post">
+            @csrf
+            
+            {{csrf_field()}}
+            <input type="hidden" name="_token" value="{{csrf_token()}}">   
+           <div class="select-rent mx-auto">
+                <label for="" class=""> Sách</label> 
+                <select name="title" id="title"  class="js-example-basic-single form-control" style=" margin: 5px 5px">
+                @foreach ($book ?? '' as $row)
+                        <option >{{$row->title}}</option>
+                @endforeach
+                </select>
+           </div>
+           
+            <div class="select-rent  mx-auto">
+                <label for=""> Người Mượn</label> 
+                <select name="username" id="name"  class="js-example-basic-single form-control" style="margin: 20px 0px">
+                @foreach ($user ?? '' as $row)
+                        <option>{{$row->username}}</option>
+                        
+                @endforeach
+                </select>
+            
+            </div>
+            <div class="form-group">
+            Ngày Mượn
+            <input type="date"  name="took_on" class="form-control">
+            @error('took_on')
+                <small class="form-text text-muted alert alert-danger">{{$message}}</small>
+            @enderror
+        </div>
+        <div class="form-group" style="margin-left:200px; ">
+            <input class="btn btn-info" type="submit" name="submit" value="Submit">
+        </div>
+        </form>
+       
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+       
+    </div>
+</div>
+</div>
+</div>
+@endforeach
+@endsection
+@section('modalUndo')
 @endsection

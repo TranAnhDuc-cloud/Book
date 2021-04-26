@@ -13,6 +13,9 @@ class LoginController extends Controller
 {
     //
     public function index(){
+        if(Auth::check()){
+            return redirect()->route('home');
+        }
         return view('admin.auth.login');
     }
     public function postLogin(Request $request){

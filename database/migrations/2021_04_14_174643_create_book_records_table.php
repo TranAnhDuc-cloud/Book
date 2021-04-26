@@ -20,9 +20,9 @@ class CreateBookRecordsTable extends Migration
             $table->unsignedBigInteger('book_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
-            $table->dateTime('took_on');
-            $table->dateTime('returned_on');
-            $table->date('due_date');
+            $table->dateTime('took_on')->nullable();
+            $table->dateTime('returned_on')->nullable();
+            $table->date('due_date')->nullable();
             $table->timestamps();
         });
     }

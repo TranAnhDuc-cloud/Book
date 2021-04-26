@@ -10,44 +10,71 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use IntlChar;
+use phpDocumentor\Reflection\DocBlock\Tags\Uses;
+use PhpParser\Node\Expr\Cast\Double;
 
 class BookRecordController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index(){
-        $data = BookRecord::all();
-        $book = Book::all();
+        $data = BookRecord::paginate(5)->fragment('book_records');
+        $book = Book::where('available',1)->get();
         $user = User::all();
         $count = $data->count();
-        return view('admin.bookrecord.danhsach')->with(['data'=>$data,'count'=>$count,'book'=>$book,'user'=>$user]);
+        return view('admin.bookrecord.index')->with(['data'=>$data,'count'=>$count,'book'=>$book,'user'=>$user]);
         // 
     }
-    protected function create( $data){
-        $bookrecord = new BookRecord();
-        $bookrecord->user_id = $data['user_id'];
-        $bookrecord->book_id = $data['book_id'];
-        $bookrecord->took_on = $data['took_on'];
-        $bookrecord->returned_on =$data['returned_on'];
-        $bookrecord->due_date = $data['due_date'];
-        $bookrecord->save();
-        return $bookrecord;
+
+
+
+
+    // ADD
+    protected function create(array $data){
+        return BookRecord::create([
+            'user_id' =>$data['user_id'],
+            'book_id' => $data['book_id'],
+            'took_on' => $data['took_on'],
+            'returned_on' => $data['returned_on'],
+            'due_date' => $data['due_date'],
+        ]);
     }
     public function add(){
         return view('admin.bookrecord.add');
     }
     public function addShow(Request $request){
-       try {
-           //code...
+        try {
+            //code...
             $allRequest = $request->all();
-            if($this->create($allRequest)){
-                return redirect()->route('bookrecord.add')->with('success','Thêm Thành Công');
+            $user_id = $request['user_id'];
+            $book_id = $request['book_id'];
+            $data = DB::table('book_records')->where('user_id',$user_id)->get();
+            $book = DB::table('books')->where('available',1)->value('id');
+            if($data != null){
+                    if($book_id == $book->id){
+                        if($this->create($allRequest))
+                            return redirect()->route('bookrecord.index')->with('success','Thêm Thành Công');
+                        else{
+                            return redirect()->route('bookrecord.index')->with('success','Thêm Thất Bại');
+                        }
+                    }
             }else{
-                return redirect()->route('bookrecord.add')->with('error','Thêm Thất Bại');
+                return redirect()->route('bookrecord.index')->with('success','ID Không tồn tại');
             }
         } catch (\Throwable $th) {
-            return redirect()->route('bookrecord.add')->with('error','Thêm Thất Bại');
-       }
-    }
+            // throw $th;
+             return redirect()->route('bookrecord.add')->with('error','Thêm Thất Bại');
+        }
+     }
+
+
+
+
+    // UPDATE
     public function edit($id){
         $book = BookRecord::find($id);
         return view('admin.bookrecord.edit',['book'=>$book]);
@@ -83,7 +110,10 @@ class BookRecordController extends Controller
         }
         return redirect()->route('bookrecord.edit',$id)->with('mess','Bạn Đã Sửa : Thành Công ');
     }
-    // 
+
+
+
+    // DELETE
     public function delete($id){
         $bookrecord = BookRecord::find($id);
         if($bookrecord != null){
@@ -92,14 +122,115 @@ class BookRecordController extends Controller
         }
         return redirect()->route('bookrecord.index')->with(['mess'=>'Bạn Đã Xóa BookRecord Có ID =  '.$bookrecord->id.' Thất Bại ']);
     }
-    public function sort(){
-        $bookrecord = DB::table('book_records')->select('*')->orderBy('book_id','asc')->get();
-        return view('admin.bookrecord.sort')->with(['book'=>$bookrecord]);
+
+
+
+    // SORT
+    public function userUp(){
+        $data = BookRecord::all();
+        $book = Book::all();
+        $user = User::all();
+        $count = $data->count();
+        $bookrecord = $this->sortBookrecord('user_id','asc');
+        return view('admin.bookrecord.index')->with(['data'=>$data,'count'=>$count,'book'=>$book,'user'=>$user,'data'=>$bookrecord]);
+        
     }
+    public function userDown(){
+        $data = BookRecord::all();
+        $book = Book::all();
+        $user = User::all();
+        $count = $data->count();
+        $bookrecord = $this->sortBookrecord('user_id','desc');
+        return view('admin.bookrecord.index')->with(['data'=>$data,'count'=>$count,'book'=>$book,'user'=>$user,'data'=>$bookrecord]);
+    }
+    public function bookUp(){
+        $data = BookRecord::all();
+        $book = Book::all();
+        $user = User::all();
+        $count = $data->count();
+       $bookrecord = BookRecord::get()->sortBy('book_id');
+       return view('admin.bookrecord.index')->with(['data'=>$data,'count'=>$count,'book'=>$book,'user'=>$user,'data'=>$bookrecord]);
+    }
+    public function bookDown(){
+        $data = BookRecord::all();
+        $book = Book::all();
+        $user = User::all();
+        $count = $data->count();
+        $bookrecord = $this->sortBookrecord('book_id','desc');
+        return view('admin.bookrecord.index')->with(['data'=>$data,'count'=>$count,'book'=>$book,'user'=>$user,'data'=>$bookrecord]);
+    }
+    public function sortBookrecord($attribute,$sort){
+        return DB::table('book_records')->select('*')->orderBy($attribute,$sort)->get();
+    }
+   
+
+    // SEARCH
     public function search(Request $request){
         $name = $request['bookrecord_id'];
-        $bookrecord = BookRecord::all()->where('id',$name);
-        return view('admin.bookrecord.search')->with(['book'=>$bookrecord]);
+        $data = BookRecord::all()->where('id',$name);
+        $book = Book::all();
+        $user = User::all();
+        return view('admin.bookrecord.search')->with(['data'=>$data,'book'=>$book,'user'=>$user]);
+       
+       
+    }
+    
+
+    // UNDO
+    public function undo($id){
+        $bookrecord = BookRecord::find($id);
+        if($bookrecord->took_on == '0001-01-01 00:00:00'){
+            return redirect()->route('bookrecord.index')->with('mess','Sách Này Đã Được Bạn Thu Hồi Rồi');
+        }else{
+            $bookrecord->took_on = '0001-01-01 00:00:00';
+            $bookrecord->returned_on = '0001-01-01 00:00:00';
+            $bookrecord->due_date = '0001-01-01';
+            $bookrecord->save();
+            return redirect()->route('bookrecord.index')->with('mess','THU HỒI THÀNH CÔNG');
+            
+        }
+        
     }
 
+    // RENT
+    public function rent(Request $request){
+        if($request->took_on != null){
+            if($this->createa($request)){
+                return redirect()->route('bookrecord.index')->with('success','Bạn Đã Cho Mượn Thành Công ');
+            }else{
+                return redirect()->route('bookrecord.index')->with('error','Cho Mượn Thất Bại ');
+            }
+        }else{
+            return redirect()->route('bookrecord.index')->with('error','Bạn Chưa Nhập Ngày Mượn ');
+        }
+        
+        
+    }
+    protected function createa(Request $request){
+        $title = $request['title'];
+        $username = $request['username'];
+        $took_on = $request['took_on'];
+        $user_id = DB::table('users')->where('username','=',$username)->value('id');
+        $book_id = DB::table('books')->where('title','=',$title)->value('id');
+        // $user_id = $user_id->values('id');
+        // $book_id = $book_id->values('id');
+        // foreach ($user_id as $key => $value) {
+        //     # code...
+        //     return $value->id;
+        // }
+        // foreach ($book_id as $key => $item) {
+            # code...
+            $create = BookRecord::create([
+                'user_id' =>$user_id,
+                'book_id' =>$book_id,
+                'took_on' => $took_on,
+                'returned_on' =>'0001-01-01 00:00:00',
+                'due_date' => '0001-01-01',
+            ]);
+            return $create;
+        // }
+        
+           
+    }
+    
 }

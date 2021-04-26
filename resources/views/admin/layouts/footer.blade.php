@@ -42,6 +42,7 @@ aria-hidden="true">
 </div>
 </div>
 
+
 <!-- Bootstrap core JavaScript-->
 <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -59,6 +60,38 @@ aria-hidden="true">
 <script src="{{asset('js/demo/chart-area-demo.js')}}"></script>
 <script src="{{asset('js/demo/chart-pie-demo.js')}}"></script>
 
+{{-- DatePicker --}}
+<script src="{{asset('datepicker/js/jquery.min.js')}}"></script>
+<script src="{{asset('datepicker/js/bootstrap.min.js')}}"></script>
+<script src="{{asset('datepicker/js/bootstrap-datepicker.js')}}"></script>
+<script>
+    $(function() {
+        'use strict';
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+        var checkin = $('#timeCheckIn').datepicker({
+            onRender: function(date) {
+                return date.valueOf() < now.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function(ev) {
+            if (ev.date.valueOf() > checkout.date.valueOf()) {
+                var newDate = new Date(ev.date)
+                newDate.setDate(newDate.getDate() + 1);
+                checkout.setValue(newDate);
+            }
+            checkin.hide();
+            $('#timeCheckOut')[0].focus();
+        }).data('datepicker');
+        var checkout = $('#timeCheckOut').datepicker({
+            onRender: function(date) {
+                return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function(ev) {
+            checkout.hide();
+        }).data('datepicker');
+    });
+</script>
 </body>
 
 </html>

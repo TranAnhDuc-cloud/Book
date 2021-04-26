@@ -48,8 +48,8 @@
                             <td>{{$item ->data_joined}}</td>
                             <td>{{$item ->is_superuser}}</td>
                             <td>{{$item ->address}}</td>
-                            <th><a href="{{route('user.edit',$item->id)}}" class="btn btn-primary">Edit</a></th>
-                            <th><a href="{{route('user.delete',$item->id)}}" class="btn btn-danger">Remove</a></th>
+                            <th><a href="{{route('user.edit',$item->id)}}" class="">Edit</a></th>
+                            <th><a href="{{route('user.delete',$item->id)}}" class="">Remove</a></th>
                         </tr>
                         @endforeach
                         @if (session('mess'))
@@ -60,6 +60,7 @@
 
                     </tbody>
                 </table>
+                {{$data->links()}}
             </div>
         </div>
     </div>

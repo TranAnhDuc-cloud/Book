@@ -26,55 +26,94 @@
                         {{session('mess')}}
                     </div>
                 @endif
-                <form action="{{route('bookrecord.update',$book->id)}}" method="post">
-                    @csrf
-                    {{csrf_field()}}
-                    <input type="hidden" name="_token" value="{{csrf_token()}}">
-                    <div class="form-group">
-                        <label>User_id</label>
-                        <input type="text" name="user_id" class="form-control" placeholder="{{$book->user_id}}">
-                        @error('user_id')
-                        <small class="form-text text-muted alert alert-danger">{{$message}}</small>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label>Book_id</label>
-                        <input type="text" name="book_id" class="form-control" placeholder="{{$book->book_id}}">
-                        @error('book_id')
-                        <small class="form-text text-muted alert alert-danger">{{$message}}</small>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label>Took On</label>
-                        <input type="text" name="took_on" class="form-control" placeholder="{{$book->took_on}}">
-                        @error('took_on')
-                        <small class="form-text text-muted alert alert-danger">{{$message}}</small>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label>Returned On</label>
-                        <input type="text" name="returnerd_on" class="form-control" placeholder="{{$book->returned_on}}">
-                        @error('returnerd_on')
-                        <small class="form-text text-muted alert alert-danger">{{$message}}</small>
-                        @enderror
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Due Date</label>
-                        <input type="text" name="due_date" class="form-control" placeholder="{{$book->due_date}}">
-                        @error('due_date')
-                        <small class="form-text text-muted alert alert-danger">{{$message}}</small>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" name="submit" class="form-control btn btn-primary" value="Sửa">
-                    </div>
-                </form>   
             </div>
+            <form action="{{route('bookrecord.update',$book->id)}}" method="post">
+                @csrf
+                {{csrf_field()}}
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <div class="container" style="padding-top:20px">
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <div class="panel panel-primary">
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <tr>
+                                            <td>User_id</td>
+                                            <td>
+                                                <input type="text" name="user_id" class="form-control" placeholder="{{$book->user_id}}">
+                                                @error('user_id')
+                                                <small class="form-text text-muted alert alert-danger">{{$message}}</small>
+                                                @enderror
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Book_id</td>
+                                            <td>
+                                                <input type="text" name="book_id" class="form-control" placeholder="{{$book->book_id}}">
+                                                @error('book_id')
+                                                <small class="form-text text-muted alert alert-danger">{{$message}}</small>
+                                                @enderror
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Took_on</td>
+                                            <td>
+                                                <input type="date" id="took_on" name="took_on" class="form-control" placeholder="{{$book->took_on}}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Returned_on</td>
+                                            <td>
+                                                <input type="date" id="returned_on" name="returned_on" class="form-control" placeholder="{{$book->returned_on}}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Due Date</td>
+                                            <td>
+                                                <input type="date" id="due_date" name="due_date" class="form-control" placeholder="{{$book->due_date}}" />
+                                            </td>
+                                        </tr>
+                                       
+                                    </table>
+                                    <div class="form-group">
+                                        <input type="submit" name="submit" class="form-control btn btn-primary" value="Sửa">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-
 </div>
 <!-- /.container-fluid -->
+<script>
+    $(function() {
+        'use strict';
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
+        var checkin = $('#timeCheckIn').datepicker({
+            onRender: function(date) {
+                return date.valueOf() < now.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function(ev) {
+            if (ev.date.valueOf() > checkout.date.valueOf()) {
+                var newDate = new Date(ev.date)
+                newDate.setDate(newDate.getDate() + 1);
+                checkout.setValue(newDate);
+            }
+            checkin.hide();
+            $('#timeCheckOut')[0].focus();
+        }).data('datepicker');
+        var checkout = $('#timeCheckOut').datepicker({
+            onRender: function(date) {
+                return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function(ev) {
+            checkout.hide();
+        }).data('datepicker');
+    });
+</script>
 @endsection

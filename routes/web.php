@@ -1,5 +1,9 @@
 <?php
 
+use App\Book;
+use App\User;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -68,6 +72,18 @@ Route::post('bookrecord/update/{id}','BookRecordController@update')->name('bookr
 // Remove
 Route::get('bookrecord/delete/{id}','BookRecordController@delete')->name('bookrecord.delete');
 // Sort
-Route::get('bookrecord/sort','BookRecordController@sort')->name('bookrecord.sort');
+Route::get('bookrecord/user/up','BookRecordController@userUp')->name('bookrecord.user.up');
+Route::get('bookrecord/user/down','BookRecordController@userDown')->name('bookrecord.user.down');
+Route::get('bookrecord/book/up','BookRecordController@bookUp')->name('bookrecord.book.up');
+Route::get('bookrecord/book/down','BookRecordController@bookDown')->name('bookrecord.book.down');
 // Search
 Route::post('bookrecord/search','BookRecordController@search')->name('bookrecord.search');
+// Rent
+Route::post('bookrecord/rent','BookRecordController@rent')->name('bookrecord.rent');
+// Undo
+Route::get('bookrecord/undo/{id}','BookRecordController@undo')->name('bookrecord.undo');
+
+// Route::get('bookrecord/name','BookRecordController@showName')->name('bookrecord.showName');
+
+Route::get('text','BookRecordController@createa');
+

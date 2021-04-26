@@ -6,16 +6,22 @@ use App\Book;
 use App\Http\Requests\BookRequest;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index(){
-        $data = DB::table('books')->select(['*'])->get();
-        $book = Book::all();
+        App::setlocale('vi');
+        // $data = DB::table('books')->select(['*'])->get();
+        $data = Book::paginate(5)->fragment('books');
         $count = $data->count();
-        return view('admin.book.danhsach',['book'=>$data],['count'=>$count]);
+        return view('admin.book.index',['book'=>$data],['count'=>$count]);
     }
     protected function create(array $book){
         return Book::create([
@@ -35,7 +41,7 @@ class BookController extends Controller
            //code...
            $allRequest = $request->all();
            if($this->create($allRequest))
-               return redirect()->route('book.add')->with('success','Thêm Sách '.$request->title.' Thành Công');
+               return redirect()->route('book.index')->with('success','Thêm Sách '.$request->title.' Thành Công');
            
        } catch (\Throwable $th) {
            //throw $th;
@@ -72,9 +78,9 @@ class BookController extends Controller
             $book->save();
         } catch (\Throwable $th) {
             //throw $th;
-            return redirect()->route('book.edit',$id);
+            return redirect()->route('book.index');
         }
-        return redirect()->route('book.edit',$id)->with('mess','Bạn Đã Sửa : '.$book->title.' Thành Công ');
+        return redirect()->route('book.index')->with('mess','Bạn Đã Sửa : '.$book->title.' Thành Công ');
     }
     // 
     public function delete($id){

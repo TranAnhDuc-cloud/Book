@@ -13,6 +13,6 @@ class BookRecordTableSeeder extends Seeder
     public function run()
     {
         //
-        factory(App\BookRecord::class,50)->create();
+        factory(App\BookRecord::class,10)->create();
     }
 }

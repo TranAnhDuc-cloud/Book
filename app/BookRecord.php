@@ -11,10 +11,10 @@ class BookRecord extends Model
     use Notifiable;
     //
         protected $fillable = [
-            'user',
-        'book',
+        'user_id',
+        'book_id',
         'took_on',
-        'return_on',
+        'returned_on',
         'due_date',
         ];
 }

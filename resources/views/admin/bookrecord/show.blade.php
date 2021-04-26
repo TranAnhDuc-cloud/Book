@@ -31,8 +31,10 @@
     </form>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{route('bookrecord.add')}}" class="btn btn-warning pt-2 pr-5 pl-5 pb-2">Thêm BookRecord</a>
-            <a href="{{route('bookrecord.sort')}}" class="btn btn-warning pt-2 pr-5 pl-5 pb-2">Sắp Xếp</a>
+            <a href="{{route('bookrecord.add')}}" class="btn btn-info pt-2 pr-5 pl-5 pb-2"><i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>Thêm BookRecord</a>
+           <a class=" btn btn-success pt-2 pr-5 pl-5 pb-2" href="" data-toggle="modal" data-target="#rentModal">Cho Mượn
+            </a>
+
           
         </div>
         
@@ -48,11 +50,22 @@
                         <tr>
                             <th>STT</th>
                             <th>ID</th>
-                            <th>User_id</th>
-                            <th>Book_id</th>
+                            <th>User_id
+                                <a href="{{route('bookrecord.user.up')}}"><i class="fas fa-arrow-up ml-2"></i></a>
+                                <a href="{{route('bookrecord.user.down')}}"><i class="fas fa-arrow-down"></i></a>
+                            </th>
+                            <th>Book_id
+                                <a href="{{route('bookrecord.book.up')}}"><i class="fas fa-arrow-up ml-2"></i></a>
+                                <a href="{{route('bookrecord.book.down')}}"><i class="fas fa-arrow-down"></i></a>
+                            </th>
+                            <th>User</th>
+                            <th>Book</th></th>
                             <th>Took_on</th>
                             <th>Returned On</th>
                             <th>Due Date</th>
+                            <th> </th>
+                            <th> </th>
+                            <th> </th>
                             
                         </tr>
                     </thead>                
@@ -64,13 +77,27 @@
                             <td>{{$item ->id}}</td>
                             <td>{{$item ->user_id}}</td>
                             <td>{{$item ->book_id}}</td>
+
+                            @foreach ($book ?? '' as $row)
+                                @if ($row->id == $item->book_id)
+                                    <td>{{$row->title}}</td>
+                                @endif
+                            @endforeach
+
+                             @foreach ($user ?? '' as $item)
+                                @if ($row->user == $item->user_id)
+                                    <td>{{$row ->firt_name}}</td>
+                                @endif
+                             @endforeach
+
                             <td>{{$item ->took_on}}</td>
                             <td>{{$item ->returned_on}}</td>
                             <td>{{$item ->due_date}}</td>
-                            {{-- <td>{{$this->$book ->}}</td>
-                            <td>{{$this->$user ->username}}</td> --}}
+                            
                             <th><a href="{{route('bookrecord.edit',$item->id)}}" class="btn btn-primary">Edit</a></th>
                             <th><a href="{{route('bookrecord.delete',$item->id)}}" class="btn btn-danger">Remove</a></th>
+                            <th><a href="{{route('bookrecord.delete',$item->id)}}" class="btn btn-success">Thu Hồi</a></th>
+
                         </tr>
                         @endforeach
                         @if (session('mess'))
@@ -87,5 +114,8 @@
 
 </div>
 <!-- /.container-fluid -->
+@endsection
 
+@section('modalRent')
+    @include('admin.bookrecord.modal_rent')
 @endsection

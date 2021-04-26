@@ -13,10 +13,14 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index(){
-        $data = User::all();
+        $data = User::paginate(5)->fragment('users');
         $count = $data->count();
-        return view('admin.user.danhsach',['data'=>$data],['count'=>$count]);
+        return view('admin.user.index',['data'=>$data],['count'=>$count]);
     }
     // 
     public function add(){

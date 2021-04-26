@@ -1,22 +1,36 @@
-@if (Session::has('error'))
-    <div class="alert alert-danger">{{Session::get('error')}}</div>
-@endif
-<br>
-<form action="{{route('login.show')}}" method="post">
-    @csrf
-    <label for="">Username</label>
-    <input type="text" placeholder="Nhập Username" name="username">
-<br>
-@if (Session::has('mess-user'))
-    <div class="alert alert-danger">{{Session::get('mess-user')}}</div>
-@endif
-<br>
-    <label for="">password</label>
-    <input type="password" placeholder="Nhập Password" name="password">
-<br>
-@if (Session::has('mess-pass'))
-    <div class="alert alert-danger">{{Session::get('mess-pass')}}</div>
-@endif
-<br>
-    <input type="submit" value="Login">
-</form>
+
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6 ielt8"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7 ielt8"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Paper Stack</title>
+<link rel="stylesheet" type="text/css" href="{{asset('css/login.css')}}" />
+</head>
+<body></body>
+<div class="container">
+	<section id="content">
+		<form action="{{route('login.show')}}" method="POST">
+            @csrf   
+			<h1>Login Form</h1>
+            @if (Session::has('error'))
+                <div class="alert alert-danger">{{Session::get('error')}}</div>
+            @endif
+			<div>
+				<input type="text" placeholder="Username" required="" id="username" name="username"/>
+			</div>
+			<div>
+				<input type="password" placeholder="Nhập Password" name="password" id="password">
+			</div>
+			<div>
+				<input type="submit" value="Log in" />
+				<a href="#">Lost your password?</a>
+				<a href="#">Register</a>
+			</div>
+		</form><!-- form -->
+	</section><!-- content -->
+</div><!-- container -->
+</body>
+</html>
