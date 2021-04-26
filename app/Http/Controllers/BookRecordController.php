@@ -23,10 +23,11 @@ class BookRecordController extends Controller
     }
     public function index(){
         $data = BookRecord::paginate(5)->fragment('book_records');
+        $bookrecord = BookRecord::all();
         $book = Book::where('available',1)->get();
         $user = User::all();
         $count = $data->count();
-        return view('admin.bookrecord.index')->with(['data'=>$data,'count'=>$count,'book'=>$book,'user'=>$user]);
+        return view('admin.bookrecord.index')->with(['data'=>$data,'count'=>$count,'book'=>$book,'user'=>$user,'bookrecord'=>$bookrecord]);
         // 
     }
 
@@ -189,7 +190,22 @@ class BookRecordController extends Controller
             return redirect()->route('bookrecord.index')->with('mess','THU HỒI THÀNH CÔNG');
             
         }
-        
+    }
+    public function thuhoi(Request $request ,$id){
+            $bookrecord = BookRecord::find($id);
+            $bookrecord->took_on = '0001-01-01 00:00:00';
+            if(isset($request->returned_on) && $request->returned_on != null){
+                $bookrecord->returned_on = $request->returned_on;
+            }else{
+                return redirect()->route('bookrecord.index')->with('mess','Chưa Nhập Ngày Trả');
+            }
+            $bookrecord->due_date = '0001-01-01';
+            $bookrecord->save();
+            return redirect()->route('bookrecord.index')->with('mess','THU HỒI THÀNH CÔNG');
+    }
+    public function getthuhoi($id){
+        $id = Bookrecord::find($id);
+        return view('admin.bookrecord.modal_undo')->with('id',$id);
     }
 
     // RENT
@@ -212,14 +228,6 @@ class BookRecordController extends Controller
         $took_on = $request['took_on'];
         $user_id = DB::table('users')->where('username','=',$username)->value('id');
         $book_id = DB::table('books')->where('title','=',$title)->value('id');
-        // $user_id = $user_id->values('id');
-        // $book_id = $book_id->values('id');
-        // foreach ($user_id as $key => $value) {
-        //     # code...
-        //     return $value->id;
-        // }
-        // foreach ($book_id as $key => $item) {
-            # code...
             $create = BookRecord::create([
                 'user_id' =>$user_id,
                 'book_id' =>$book_id,
@@ -228,8 +236,6 @@ class BookRecordController extends Controller
                 'due_date' => '0001-01-01',
             ]);
             return $create;
-        // }
-        
            
     }
     

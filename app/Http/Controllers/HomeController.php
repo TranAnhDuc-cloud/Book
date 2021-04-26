@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Book;
+use App\BookRecord;
+use App\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -12,6 +15,11 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
     public function index(){
-        return view('admin.pages.home');
+        $data = BookRecord::all();
+        $book = Book::where('available',1)->get();
+        $user = User::all();
+        $count = $data->count();
+        return view('admin.pages.home')->with(['data'=>$data,'count'=>$count,'book'=>$book,'user'=>$user]);
+        // 
     }
 }

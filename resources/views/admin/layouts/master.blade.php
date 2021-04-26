@@ -6,8 +6,4 @@
     <div class="modalRent">
         @yield('modalRent')
     </div>
-    <div class="modalUndo">
-        @yield('modalUndo')
-    </div>
-    
     @include('admin.layouts.footer')

@@ -96,12 +96,12 @@
                             
                             <th><a href="{{route('bookrecord.edit',$item->id)}}" style="font-size: 12px" class="btn btn-primary">Edit</a></th>
                             <th><a href="{{route('bookrecord.delete',$item->id)}}" style="font-size: 12px" class="btn btn-danger">Remove</a></th>
-                            <th><a href="{{route('bookrecord.undo',$item->id)}}"  style="font-size: 12px" class="btn btn-success">Thu Hồi</a></th>
-                            {{-- <th>
-                                <a class=" btn btn-success" style="font-size: 12px" href="" data-toggle="modal" data-target="#undoModal">Thu Hồi
-                                </a>
-                                
-                            </th> --}}
+                            {{-- <th><a href="{{route('bookrecord.undo',$item->id)}}"  style="font-size: 12px" class="btn btn-success">Thu Hồi</a></th> --}}
+                            <th>
+                                {{-- <a class=" btn btn-success" style="font-size: 12px" href="{{route('bookrecord.getthuhoi',$item->id)}}" data-toggle="modal" data-target="">Thu Hồi
+                                </a> --}}
+                                <a class=" btn btn-success" style="font-size: 12px" href="{{route('bookrecord.getthuhoi',$item->id)}}">Thu Hồi</a>
+                            </th>
                         </tr>
                         @endforeach
                         @if (session('mess'))
@@ -190,6 +190,4 @@ aria-hidden="true">
 </div>
 </div>
 @endforeach
-@endsection
-@section('modalUndo')
 @endsection

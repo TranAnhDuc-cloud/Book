@@ -82,8 +82,8 @@ Route::post('bookrecord/search','BookRecordController@search')->name('bookrecord
 Route::post('bookrecord/rent','BookRecordController@rent')->name('bookrecord.rent');
 // Undo
 Route::get('bookrecord/undo/{id}','BookRecordController@undo')->name('bookrecord.undo');
+Route::post('bookrecord/thuhoi/{id}','BookRecordController@thuhoi')->name('bookrecord.thuhoi');
+Route::get('bookrecord/getthuhoi/{id}','BookRecordController@getthuhoi')->name('bookrecord.getthuhoi');
 
-// Route::get('bookrecord/name','BookRecordController@showName')->name('bookrecord.showName');
 
-Route::get('text','BookRecordController@createa');
 
