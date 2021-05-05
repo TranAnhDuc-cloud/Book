@@ -22,7 +22,7 @@ class BookRecordController extends Controller
         $this->middleware('auth');
     }
     public function index(){
-        $data = BookRecord::paginate(5)->fragment('book_records');
+        $data = BookRecord::all();
         $bookrecord = BookRecord::all();
         $book = Book::where('available',1)->get();
         $user = User::all();

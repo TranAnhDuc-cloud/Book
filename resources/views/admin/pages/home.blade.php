@@ -7,7 +7,7 @@
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Quản Lý BookRecord</h1>
-    <p class="mb-4">Admin có thể thêm, sửa, xóa các BookRecords</p>
+    
 
     <!-- DataTales Example -->
     <form action="{{route('bookrecord.search')}}" method="post">
@@ -177,6 +177,7 @@
 
 </div>
 <!-- /.container-fluid -->
+
 
 @endsection
 
